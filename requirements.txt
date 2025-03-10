@@ -1,0 +1,8 @@
+pandas==2.2.3
+Requests==2.32.3
+streamlit==1.42.0
+gspread==6.2.0
+google-auth-oauthlib==1.2.1
+oauth2client==4.1.3
+oauthlib==3.2.2
+requests-oauthlib==2.0.0
