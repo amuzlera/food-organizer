@@ -1,4 +1,3 @@
-
 from collections import defaultdict
 import pandas as pd
 import streamlit as st
@@ -17,6 +16,7 @@ def check_for_credentials(uploaded_files):
             if file_name.endswith(".json"):
                 with open(CREDENTIALS_FILE, "wb") as f:
                     f.write(uploaded_file.getbuffer())
+                    st.rerun()
 
 
 def get_ingredient(food_name):
@@ -25,7 +25,7 @@ def get_ingredient(food_name):
 
 def load_menu():
     if "menu" not in st.session_state:
-        st.session_state.menu = [{i["dia"]: i["comida"]} for i in spreadsheet_to_dict('menu')]
+        st.session_state.menu = {i["dia"]: i["comida"] for i in spreadsheet_to_dict('menu')}
     if "recetas" not in st.session_state:
         recetas = spreadsheet_to_pandas('recetas')
         recetas = recetas.set_index('ingredientes')
@@ -91,11 +91,15 @@ def save_weekday_menu():
         print(st.session_state.menu)
 
 
-load_menu()
-st.markdown("# Menu semanal")
-show_weekday_menu()
-save_weekday_menu()
-st.markdown("# Lista de compras")
-create_shopping_list()
-if uploaded_files := st.file_uploader("Subi tu json de credenciales", type=VALID_EXTENSIONS, accept_multiple_files=True):
-    check_for_credentials(uploaded_files)
+if os.path.exists(CREDENTIALS_FILE):
+    load_menu()
+    st.markdown("# Menu semanal")
+    show_weekday_menu()
+    save_weekday_menu()
+    st.markdown("# Lista de compras")
+    create_shopping_list()
+else:
+    st.markdown("# Configuracion de credenciales")
+    if uploaded_files := st.file_uploader("Subi tu json de credenciales", type=VALID_EXTENSIONS, accept_multiple_files=True):
+        check_for_credentials(uploaded_files)
+    

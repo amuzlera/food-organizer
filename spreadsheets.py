@@ -1,7 +1,6 @@
 import pandas as pd
 import json
 import gspread
-import plotly.express as px
 
 from oauth2client.service_account import ServiceAccountCredentials
 
