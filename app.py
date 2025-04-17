@@ -44,12 +44,9 @@ def show_weekday_menu():
             st.markdown(f'### {day}')
         with col2:
             with st.expander(f'{food_name}'):
-                col21, col22 = st.columns([1, 1])
                 for ingredient_name, quantity in get_ingredient(food_name).items():
-                    with col21:
-                        st.checkbox(f"{ingredient_name}", key=f'checkbox-{day}-{ingredient_name}')
-                    with col22:
-                        st.write(quantity)
+                    st.checkbox(f"{ingredient_name}    ->    {quantity}", key=f'checkbox-{day}-{ingredient_name}')
+
         with col3:
             with st.expander("Cambiar comida"):
                 st.selectbox("Selecciona nueva comida", st.session_state.all_food_names, key=f'selectbox-{day}')
@@ -76,12 +73,9 @@ def create_shopping_list():
     sorted_ingredients = sort_by_shopping_place(ingredients)
     for place, items in sorted_ingredients.items():
         with st.expander(place):
-            col1, col2 = st.columns([1, 1])
             for k, v in items.items():
-                with col1:
-                    st.checkbox(f"{k}", key=f'checkbox-{k}')
-                with col2:
-                    st.write(str(v))
+                st.checkbox(f"{k}    ->    {v}", key=f'checkbox-{k}')
+
 
 
 def save_weekday_menu():
