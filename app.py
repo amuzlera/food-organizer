@@ -17,6 +17,7 @@ def password_protected_export():
                 json.dump(secret_json, f)
             
             st.success("¡Contraseña correcta! El secreto se guardó en secret.json.")
+            st.rerun()
         else:
             st.error("Contraseña incorrecta.")
 
