@@ -2,21 +2,24 @@ from collections import defaultdict
 import pandas as pd
 import streamlit as st
 import os
+import json
 
 from spreadsheets import save_dataframe_to_spreadsheet, spreadsheet_to_dict, CREDENTIALS_FILE, spreadsheet_to_pandas
 
-VALID_EXTENSIONS = (".json")
-
-
-def check_for_credentials(uploaded_files):
-    if uploaded_files:
-        for uploaded_file in uploaded_files:
-            file_name = uploaded_file.name
-            os.makedirs("files", exist_ok=True)
-            if file_name.endswith(".json"):
-                with open(CREDENTIALS_FILE, "wb") as f:
-                    f.write(uploaded_file.getbuffer())
-                    st.rerun()
+def password_protected_export():
+    user_password = st.text_input("Ingrese la contraseña:", type="password")
+    
+    if st.button("Verificar y exportar secreto"):
+        if user_password == st.secrets["password"]:
+            secret_str = st.secrets["secret"]
+            secret_json = json.loads(secret_str)
+            with open(CREDENTIALS_FILE, "w") as f:
+                json.dump(secret_json, f)
+            
+            st.success("¡Contraseña correcta! El secreto se guardó en secret.json.")
+            st.rerun()
+        else:
+            st.error("Contraseña incorrecta.")
 
 
 def get_ingredient(food_name):
@@ -94,6 +97,5 @@ if os.path.exists(CREDENTIALS_FILE):
     create_shopping_list()
 else:
     st.markdown("# Configuracion de credenciales")
-    if uploaded_files := st.file_uploader("Subi tu json de credenciales", type=VALID_EXTENSIONS, accept_multiple_files=True):
-        check_for_credentials(uploaded_files)
+    password_protected_export()
     
