@@ -6,7 +6,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 
 SPREADSHEET_NAME = 'food-organizer'
-CREDENTIALS_FILE = 'files/client_secret.json'
+CREDENTIALS_FILE = 'client_secret.json'
 
 
 def get_data_from_spreadsheet():
